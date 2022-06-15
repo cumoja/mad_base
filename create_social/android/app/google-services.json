@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "684296137056",
+    "project_id": "social-by-creationdriven",
+    "storage_bucket": "social-by-creationdriven.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:684296137056:android:5fb2fb2b88fae60b0a1605",
+        "android_client_info": {
+          "package_name": "com.creationdriven.create_social"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "684296137056-o2b2s70ivmpjb3sb354glln8v2lj4urt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsWS5akxO587bNqvur_YYW5E969J_X1EY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "684296137056-o2b2s70ivmpjb3sb354glln8v2lj4urt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
