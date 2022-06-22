@@ -1,4 +1,5 @@
 import 'package:create_social/forms/loginform.dart';
+import 'package:create_social/forms/registerform.dart';
 import 'package:flutter/material.dart';
 
 class Authentication extends StatelessWidget {
@@ -9,6 +10,6 @@ class Authentication extends StatelessWidget {
         appBar: AppBar(
           title: const Text("Authentication Basics"),
         ),
-        body: const LoginForm());
+        body: const RegisterForm());
   }
 }
