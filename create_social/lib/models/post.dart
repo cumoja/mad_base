@@ -4,7 +4,7 @@ class Post {
   final String id;
   final String content; // The typed message or the url of the image
   final Timestamp createdAt; // Timestamp of message
-  final String creator;
+  final String creator; // User id of the creator
 
   Post(
       {required this.id,

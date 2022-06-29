@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:create_social/model/post.dart';
-import 'package:create_social/model/user.dart' as m;
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:create_social/forms/postform.dart';
+import 'package:create_social/models/post.dart';
+import 'package:create_social/services/firestore_service.dart';
+import 'package:create_social/widgets/loading.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,67 +14,58 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomeState extends State<HomePage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
-  late Stream<QuerySnapshot> _postStream;
-  final List<Post> _posts = [];
-  List<m.User> users = [];
-
-  @override
-  void initState() {
-    super.initState();
-    getList();
-    getStreamList();
-
-    _postStream = _db.collection("posts").snapshots();
-  }
-
-  void getStreamList() {
-    _db.collection("users").snapshots().listen((snapshots) {
-      for (var element in snapshots.docs) {
-        setState(() {
-          users.add(m.User.fromJson(element.id, element.data()));
-        });
-      }
-    });
-  }
-
-  void getList() {
-    _db.collection("users").get().then((result) {
-      setState(() {
-        for (var element in result.docs) {
-          users.add(element.data()["name"]);
-        }
-      });
-    });
-  }
-
-  void getList2() async {
-    var result = await _db.collection("users").get();
-    for (var element in result.docs) {
-      users.add(element.data()["name"]);
-    }
-  }
+  final fbAuth.FirebaseAuth _auth = fbAuth.FirebaseAuth.instance;
+  final FirestoreService _fs = FirestoreService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(_auth.currentUser!.uid),
+          title: const Text("Social Stream"),
         ),
-        body: StreamBuilder(
-          stream: _postStream,
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
+        floatingActionButton: FloatingActionButton(
+          onPressed: _showPostFeild,
+          child: const Icon(Icons.post_add),
+        ),
+        body: StreamBuilder<List<Post>>(
+          stream: _fs.post,
+          builder: (BuildContext context, AsyncSnapshot<List<Post>> snapshots) {
             if (snapshots.hasError) {
-              return const Center(child: Text("Something has gone wrong"));
+              return Center(child: Text(snapshots.error.toString()));
             } else if (snapshots.hasData) {
-              var posts = snapshots.data!.docs;
+              var posts = snapshots.data!;
+              return posts.isEmpty
+                  ? const Center(child: Text("Aint no POst Biiihhhhhhh"))
+                  : ListView.builder(
+                      itemCount: posts.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          ListTile(
+                              title: Text(FirestoreService
+                                  .userMap[posts[index].creator]!.name),
+                              subtitle: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(posts[index].content),
+                                    const SizedBox(height: 10),
+                                    Text(posts[index]
+                                        .createdAt
+                                        .toDate()
+                                        .toString())
+                                  ])));
             }
-            return const Center(
-              child: Text("Just something to be here for now"),
-            );
+            return const Loading();
           },
         ));
+  }
+
+  //Displays a ModalPopUp that shows a text field and submit button for Post
+
+  void _showPostFeild() {
+    showModalBottomSheet<void>(
+        context: context,
+        builder: (context) {
+          return const PostForm();
+        });
   }
 }

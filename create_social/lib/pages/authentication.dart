@@ -10,6 +10,6 @@ class Authentication extends StatelessWidget {
         appBar: AppBar(
           title: const Text("Authentication Basics"),
         ),
-        body: const RegisterForm());
+        body: const LoginForm());
   }
 }

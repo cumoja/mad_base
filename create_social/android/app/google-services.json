@@ -29,6 +29,13 @@
             {
               "client_id": "684296137056-o2b2s70ivmpjb3sb354glln8v2lj4urt.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "684296137056-g0b18gorbnc81inhg8c97re0qpgtv829.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.creationdriven.create-social"
+              }
             }
           ]
         }
