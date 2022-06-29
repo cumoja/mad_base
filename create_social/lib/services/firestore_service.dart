@@ -7,6 +7,7 @@ import 'package:create_social/models/user.dart';
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   static Map<String, User> userMap = {};
+  static Map<String, Post> postMap = {};
 
   final usersCollection = FirebaseFirestore.instance.collection("users");
   final postsCollection = FirebaseFirestore.instance.collection("posts");
@@ -50,6 +51,7 @@ class FirestoreService {
     for (var doc in snapshot.docs) {
       Post post = Post.fromJson(doc.id, doc.data());
       posts.add(post);
+      postMap[post.id] = post;
     }
     return posts;
   }
