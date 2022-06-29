@@ -63,7 +63,16 @@ class _HomeState extends State<HomePage> {
         body: StreamBuilder(
           stream: _postStream,
           builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {},
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
+            if (snapshots.hasError) {
+              return const Center(child: Text("Something has gone wrong"));
+            } else if (snapshots.hasData) {
+              var posts = snapshots.data!.docs;
+            }
+            return const Center(
+              child: Text("Just something to be here for now"),
+            );
+          },
         ));
   }
 }
