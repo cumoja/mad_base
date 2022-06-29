@@ -1,9 +1,6 @@
-import 'package:create_social/pages/home.dart';
+import 'package:create_social/pages/driver.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:create_social/pages/authentication.dart';
-
-import 'widgets/loading.dart';
 
 Future<void> main() async {
   //Always needed for firebase
@@ -21,6 +18,6 @@ class SocialApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: HomePage());
+        home: const Driver());
   }
 }

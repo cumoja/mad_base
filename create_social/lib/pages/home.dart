@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:create_social/model/post.dart';
 import 'package:create_social/model/user.dart' as m;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,22 +14,24 @@ class HomePage extends StatefulWidget {
 class _HomeState extends State<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-
+  late Stream<QuerySnapshot> _postStream;
+  final List<Post> _posts = [];
   List<m.User> users = [];
-// Stream
-// Future
+
   @override
   void initState() {
     super.initState();
     getList();
     getStreamList();
+
+    _postStream = _db.collection("posts").snapshots();
   }
 
   void getStreamList() {
     _db.collection("users").snapshots().listen((snapshots) {
       for (var element in snapshots.docs) {
         setState(() {
-          users.add(m.User.fromJson(element.data()));
+          users.add(m.User.fromJson(element.id, element.data()));
         });
       }
     });
@@ -57,13 +60,10 @@ class _HomeState extends State<HomePage> {
         appBar: AppBar(
           title: Text(_auth.currentUser!.uid),
         ),
-        body: ListView.builder(
-            itemCount: users.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                title: Text(users[index].name),
-                subtitle: Text(users[index].bio),
-              );
-            }));
+        body: StreamBuilder(
+          stream: _postStream,
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {},
+        ));
   }
 }
