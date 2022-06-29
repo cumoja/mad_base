@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:create_social/forms/postform.dart';
 import 'package:create_social/models/post.dart';
+import 'package:create_social/pages/profile.dart';
 import 'package:create_social/services/firestore_service.dart';
 import 'package:create_social/widgets/loading.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
@@ -34,14 +34,31 @@ class _HomeState extends State<HomePage> {
               return Center(child: Text(snapshots.error.toString()));
             } else if (snapshots.hasData) {
               var posts = snapshots.data!;
+              var filterpost = [];
+              for (var element in posts) {
+                if (element.creator == "SomeId") {
+                  filterpost.add(element);
+                }
+              }
+
               return posts.isEmpty
                   ? const Center(child: Text("Aint no POst Biiihhhhhhh"))
                   : ListView.builder(
                       itemCount: posts.length,
                       itemBuilder: (BuildContext context, int index) =>
                           ListTile(
-                              title: Text(FirestoreService
-                                  .userMap[posts[index].creator]!.name),
+                              title: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Profile(
+                                                observedUser: FirestoreService
+                                                        .userMap[
+                                                    posts[index].creator]!)));
+                                  },
+                                  child: Text(FirestoreService
+                                      .userMap[posts[index].creator]!.name)),
                               subtitle: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,

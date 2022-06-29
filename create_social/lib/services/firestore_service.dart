@@ -7,6 +7,10 @@ import 'package:create_social/models/user.dart';
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   static Map<String, User> userMap = {};
+
+  final usersCollection = FirebaseFirestore.instance.collection("users");
+  final postsCollection = FirebaseFirestore.instance.collection("posts");
+
   final StreamController<Map<String, User>> _usersController =
       StreamController<Map<String, User>>();
   final StreamController<List<Post>> _postsController =
@@ -16,8 +20,8 @@ class FirestoreService {
   Stream<List<Post>> get post => _postsController.stream;
 
   FirestoreService() {
-    _db.collection("users").snapshots().listen(_usersUpdated);
-    _db.collection("posts").snapshots().listen(_postsUpdated);
+    usersCollection.snapshots().listen(_usersUpdated);
+    postsCollection.snapshots().listen(_postsUpdated);
   }
 
   void _usersUpdated(QuerySnapshot<Map<String, dynamic>> snapshot) {
@@ -48,5 +52,24 @@ class FirestoreService {
       posts.add(post);
     }
     return posts;
+  }
+
+  Future<bool> addUser(String userId, Map<String, dynamic> data) async {
+    try {
+      await usersCollection.doc(userId).set(data);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> addPost(Map<String, dynamic> data) async {
+    data["createdAt"] = Timestamp.now();
+    try {
+      await postsCollection.add(data);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }
