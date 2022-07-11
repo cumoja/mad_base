@@ -1,9 +1,9 @@
 import 'package:create_social/forms/postform.dart';
 import 'package:create_social/models/post.dart';
+import 'package:create_social/pages/conversations.dart';
 import 'package:create_social/pages/profile.dart';
 import 'package:create_social/services/firestore_service.dart';
 import 'package:create_social/widgets/loading.dart';
-import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,7 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomeState extends State<HomePage> {
-  final fbAuth.FirebaseAuth _auth = fbAuth.FirebaseAuth.instance;
   final FirestoreService _fs = FirestoreService();
 
   @override
@@ -22,13 +21,22 @@ class _HomeState extends State<HomePage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Social Stream"),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const ConversationsPage()));
+                },
+                icon: const Icon(Icons.message)),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
+          ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: _showPostFeild,
           child: const Icon(Icons.post_add),
         ),
         body: StreamBuilder<List<Post>>(
-          stream: _fs.post,
+          stream: _fs.posts,
           builder: (BuildContext context, AsyncSnapshot<List<Post>> snapshots) {
             if (snapshots.hasError) {
               return Center(child: Text(snapshots.error.toString()));
