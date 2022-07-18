@@ -1,5 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/*
+POST
+
+id(PRIMARY KEY )---   content   --- type    --- createdAt -- creator
+STRING                STRING        INTEGER     DateTime    STRING
+
+
+*/
 class Post {
   final String id;
   final String content; // The typed message or the url of the image

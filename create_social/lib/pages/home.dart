@@ -25,7 +25,7 @@ class _HomeState extends State<HomePage> {
             IconButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const ConversationsPage()));
+                      builder: (context) => ConversationsPage()));
                 },
                 icon: const Icon(Icons.message)),
             IconButton(onPressed: () {}, icon: const Icon(Icons.settings))

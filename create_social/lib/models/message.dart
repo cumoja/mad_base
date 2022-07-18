@@ -7,13 +7,15 @@ class Message {
       type; // The type of message this is 0:Post 1:UploadedImage 2:Sticker
   final Timestamp createdAt; // Timestamp of message
   final String fromId; // User id of the creator
+  final String convoId; // User id of the creator
 
   Message(
       {required this.id,
       required this.content,
       required this.type,
       required this.createdAt,
-      required this.fromId});
+      required this.fromId,
+      required this.convoId});
 
   factory Message.fromJson(String id, Map<String, dynamic> data) {
     return Message(
@@ -21,7 +23,8 @@ class Message {
         content: data["content"],
         type: data["type"] ?? 0,
         createdAt: data["createdAt"],
-        fromId: data["fromId"]);
+        fromId: data["fromId"],
+        convoId: data["conversationId"]);
   }
 
   Map<String, dynamic> toJSON() {
@@ -29,7 +32,8 @@ class Message {
       "content": content,
       "type": type,
       "createdAt": createdAt,
-      "fromId": fromId
+      "fromId": fromId,
+      "conversationId": convoId
     };
   }
 }

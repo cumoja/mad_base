@@ -16,21 +16,24 @@ class _PostFormState extends State<PostForm> {
   final TextEditingController _content = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(30.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          TextField(
-            controller: _content,
-            minLines: 5,
-            maxLines: 5,
-          ),
-          OutlinedButton(
-              onPressed: _submitPost, child: const Text("Submit Post"))
-        ],
+    return SafeArea(
+      maintainBottomViewPadding: true,
+      child: Padding(
+        padding: const EdgeInsets.all(30.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            TextField(
+              controller: _content,
+              minLines: 5,
+              maxLines: 5,
+            ),
+            OutlinedButton(
+                onPressed: _submitPost, child: const Text("Submit Post"))
+          ],
+        ),
       ),
     );
   }
