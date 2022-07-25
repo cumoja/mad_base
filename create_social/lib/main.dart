@@ -19,6 +19,7 @@ class SocialApp extends StatelessWidget {
     return MaterialApp(
         title: 'SocialApp',
         theme: ThemeData(
+          fontFamily: "Lato",
           primarySwatch: Colors.blue,
         ),
         home: const Driver());

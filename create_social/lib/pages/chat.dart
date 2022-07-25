@@ -3,6 +3,7 @@ import 'package:create_social/models/message.dart';
 import 'package:create_social/services/firestore_service.dart';
 import 'package:create_social/style/style.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ChatPage extends StatelessWidget {
@@ -51,7 +52,6 @@ class ChatPage extends StatelessWidget {
   Widget _messagingArea(BuildContext context) {
     return Expanded(
         child: Container(
-      color: Colors.blueGrey,
       width: screenWidth(context),
       child: StreamBuilder<List<Message>>(
         stream: _fs.messages,
@@ -67,14 +67,70 @@ class ChatPage extends StatelessWidget {
                 itemCount: messages.length,
                 itemBuilder: (context, index) {
                   bool me = messages[index].fromId == _fs.getUserId();
-                  return Container(
-                      color: me ? Colors.deepOrange : Colors.tealAccent,
-                      child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            messages[index].content,
-                            textAlign: me ? TextAlign.right : TextAlign.left,
-                          )));
+
+                  return SizedBox(
+                      width: screenWidth(context),
+                      child: Container(
+                          child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: me
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start,
+                              children: [
+                            Container(
+                                decoration: BoxDecoration(
+                                    color: me ? Colors.green : Colors.blue,
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(30.0))),
+                                clipBehavior: Clip.hardEdge,
+                                margin: EdgeInsets.only(
+                                    top: 10.0,
+                                    right:
+                                        me ? 5.0 : screenWidth(context) * 0.3,
+                                    left:
+                                        me ? screenWidth(context) * 0.3 : 5.0),
+                                child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment: me
+                                            ? CrossAxisAlignment.end
+                                            : CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            FirestoreService
+                                                .userMap[
+                                                    messages[index].fromId]!
+                                                .name,
+                                            textAlign: me
+                                                ? TextAlign.right
+                                                : TextAlign.left,
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                          Text(
+                                            messages[index].content,
+                                            style:
+                                                const TextStyle(fontSize: 18),
+                                            textAlign: me
+                                                ? TextAlign.right
+                                                : TextAlign.left,
+                                          )
+                                        ]))),
+                            Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 20, right: 20),
+                                child: Text(
+                                  DateFormat('M/dd/yyyy h:mm a').format(
+                                      messages[index].createdAt.toDate()),
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontStyle: FontStyle.italic),
+                                  textAlign:
+                                      me ? TextAlign.right : TextAlign.left,
+                                ))
+                          ])));
                 });
           } else {
             return const Center(

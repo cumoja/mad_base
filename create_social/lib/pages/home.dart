@@ -1,9 +1,11 @@
 import 'package:create_social/forms/postform.dart';
 import 'package:create_social/models/post.dart';
 import 'package:create_social/pages/conversations.dart';
+import 'package:create_social/pages/driver.dart';
 import 'package:create_social/pages/profile.dart';
 import 'package:create_social/services/firestore_service.dart';
 import 'package:create_social/widgets/loading.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,7 +22,10 @@ class _HomeState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Social Stream"),
+          title: const Text(
+            "Social Stream",
+            style: TextStyle(fontWeight: FontWeight.w700),
+          ),
           actions: [
             IconButton(
                 onPressed: () {
@@ -28,7 +33,13 @@ class _HomeState extends State<HomePage> {
                       builder: (context) => ConversationsPage()));
                 },
                 icon: const Icon(Icons.message)),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
+            IconButton(
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => Driver()));
+                },
+                icon: const Icon(Icons.settings))
           ],
         ),
         floatingActionButton: FloatingActionButton(
